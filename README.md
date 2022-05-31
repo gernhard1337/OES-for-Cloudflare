@@ -1,15 +1,13 @@
-# 👷 `worker-template` Hello World
+#  OES Simulation with Cloudflare Workers
 
-A template for kick starting a Cloudflare worker project.
-
-[`index.js`](https://github.com/cloudflare/worker-template/blob/master/index.js) is the content of the Workers script.
+A template for kick starting OES Computation with a Cloudflare worker project.
 
 #### Wrangler
 
-To generate using [wrangler](https://github.com/cloudflare/wrangler)
+To generate using [wrangler](https://github.com/cloudflare/wrangler) simply run: 
 
 ```
-wrangler generate projectname https://github.com/cloudflare/worker-template
+wrangler generate projectname https://github.com/gernhard1337/OES-for-Cloudflare
 ```
+Project is generated then with Core 0 and Simulation of the Inventory Management.
 
-Further documentation for Wrangler can be found [here](https://developers.cloudflare.com/workers/tooling/wrangler).
