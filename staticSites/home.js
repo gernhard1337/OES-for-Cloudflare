@@ -10,11 +10,11 @@ const home = () =>`
   <p>There are two implementations for this Task:</p>
   <div>
     Compute the results and give HTML-response after computation. 
-    <a href="">Start this computation</a>
+    <a href="/staticGeneration">Start this computation</a>
   </div>
   <div>
     Send HTML-Construct and once simulation is ready subsequent deliver the results. 
-    <a href="">Start this computation</a>
+    <a href="/dynamicGeneration">Start this computation</a>
   </div>
 </body>`;
 export default home
