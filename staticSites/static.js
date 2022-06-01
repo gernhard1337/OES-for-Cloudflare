@@ -1,5 +1,8 @@
 // Run Simulation and build a Table with the results
+import Worker from "../Core0/Inventory-Management/simulation-worker"
+
 function table_html() {
+  // const worker = new Worker();
   let answer = "kek";
   return `<div>` +  answer + `</div>`;
 }
