@@ -8,27 +8,29 @@
  ******************************************************************************/
 
 // Create initial objects/maps
-const sim = Object.create(null); // instead of {}
+export const sim = Object.create(null); // instead of {}
 sim.model = Object.create(null);
 sim.model.v = Object.create(null);
 sim.model.f = Object.create(null);
 sim.scenario = Object.create(null);
-oes = Object.create(null);
+
+export const oes = Object.create(null);
 oes.defaults = {
   nextMomentDeltaT: 2,
   expostStatDecimalPlaces: 2,
   simLogDecimalPlaces: 2
 };
+
 /**
  * An OES object has an ID and may have a unique name. If no ID value is provided on creation,
  * an ID value is automatically assigned using the simulators "idCounter".
  */
-class oBJECT {
+export class oBJECT {
   constructor( id, name) {
     // if no "id" value provided, use (and increment) "idCounter"
     this.id = id || sim.scenario.idCounter++;
     this.name = name;  // optional unique
-    // add each new object to the collection of simulation objects
+    // add each new object to the collection of simulation.js objects
     sim.objects.set( this.id, this);
   }
   // overwrite/improve the standard toString method
@@ -56,7 +58,7 @@ class oBJECT {
 /**
  * An OES Core 0 event is instantaneous
  */
-class eVENT {
+export class eVENT {
   constructor({occTime, delay}) {
     if (occTime) this.occTime = occTime;
     else if (delay) this.occTime = sim.time + delay;
@@ -83,7 +85,7 @@ class eVENT {
 /**
  * An experiment type is defined for a model.
  */
-class eXPERIMENTtYPE {
+export class eXPERIMENTtYPE {
   constructor({model, title, nmrOfReplications}) {
     this.model = model;  // optional (by default the model is defined in the context)
     this.title = title;  // the combination of model and title forms an ID

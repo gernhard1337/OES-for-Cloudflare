@@ -10,12 +10,13 @@
 /****************************************************************
  ****************************************************************/
 var math = Object.create( null);
+export var math;
 /**
  * Compute the Cartesian Product of an array of arrays
  * From https://stackoverflow.com/a/36234242/2795909
  * @param {Array} arr - An array of arrays of values to be combined
  */
-math.cartesianProduct = function (arr) {
+export function cartesianProduct(arr) {
   return arr.reduce( function (a,b) {
     return a.map( function (x) {
       return b.map( function (y) {
@@ -29,7 +30,7 @@ math.cartesianProduct = function (arr) {
  * @param {number} x - the number to round
  * @param {number} d - decimal places
  */
-math.round = function (x,d) {
+export function round (x,d) {
   var roundingFactor = Math.pow(10, d);
   return Math.round((x + Number.EPSILON) * roundingFactor) / roundingFactor;
 };
@@ -37,7 +38,7 @@ math.round = function (x,d) {
  * Compute the sum of an array of numbers
  * @param {Array} data - An array of numbers
  */
-math.sum = function (data) {
+export function sum(data) {
   function add( a, b) {return a + b;}
   return data.reduce( add, 0);
 };
@@ -45,34 +46,34 @@ math.sum = function (data) {
  * Compute the max/min of an array of numbers
  * @param {Array} data - An array of numbers
  */
-math.max = function (data) {
+export function max(data) {
   return Math.max( ...data);
 };
-math.min = function (data) {
+export function min (data) {
   return Math.min( ...data);
 };
 /**
  * Compute the arithmetic mean of an array of numbers
  * @param {Array} data - An array of numbers
  */
-math.mean = function (data) {
+export function mean  (data) {
   return math.sum( data) / data.length;
 };
 /**
  * Compute the standard deviation of an array of numbers
  * @param {Array} data - An array of numbers
  */
-math.stdDev = function (data) {
+export function stdDev (data) {
   var m = math.mean( data);
   return Math.sqrt( data.reduce( function (acc, x) {
     return acc + Math.pow( x - m, 2);}, 0) / (data.length - 1));
 };
 // Returns a random number between min (inclusive) and max (exclusive)
-math.getUniformRandomNumber = function (min, max) {
+export function getUniformRandomNumber (min, max) {
   return Math.random() * (max - min) + min;
 }
 // Returns a random integer between min (included) and max (included)
-math.getUniformRandomInteger = function (min, max) {
+export function getUniformRandomInteger (min, max) {
   return Math.floor( Math.random() * (max - min + 1)) + min;
 }
 /**
@@ -84,7 +85,7 @@ math.getUniformRandomInteger = function (min, max) {
  * @param {number} alpha - Confidence interval to estimate [0,1] (default 0.95)
  * @returns {{lowerBound:number, upperBound:number}} Lower and upper bound of confidence interval
  */
-math.confInt = function ( data, samples, alpha ) {
+export function confInt( data, samples, alpha ) {
   var n = samples || 10000;
   var p = alpha || 0.95;
   var mu = Array( n );
@@ -107,20 +108,23 @@ math.confInt = function ( data, samples, alpha ) {
     upperBound: m - mu[ Math.floor( Math.max( 0, n * ( ( 1 - p ) / 2 ) ) ) ]
   };
 };
+
 /**
  * Define summary statistics record
  */
-math.stat = Object.create( null);
-math.stat.summary = {
-  average: {label:"Average", f: math.mean},
-  stdDev: {label:"Std.dev.", f: math.stdDev},
-  min: {label:"Minimum", f: math.min},
-  max: {label:"Maximum", f: math.max},
-  confIntLowerBound: {label: "CI Lower", f: function ( data ) {
-      math.stat.CurrentCI = math.confInt( data ); // {lowerBound: x, upperBound: y}
-      return math.stat.CurrentCI.lowerBound;
-  }},
-  confIntUpperBound: {label: "CI Upper", f: function () {
-      return math.stat.CurrentCI.upperBound;
-  }}
+export function generate_stats(){
+  math.stat = Object.create( null);
+  math.stat.summary = {
+    average: {label:"Average", f: math.mean},
+    stdDev: {label:"Std.dev.", f: math.stdDev},
+    min: {label:"Minimum", f: math.min},
+    max: {label:"Maximum", f: math.max},
+    confIntLowerBound: {label: "CI Lower", f: function ( data ) {
+        math.stat.CurrentCI = math.confInt( data ); // {lowerBound: x, upperBound: y}
+        return math.stat.CurrentCI.lowerBound;
+      }},
+    confIntUpperBound: {label: "CI Upper", f: function () {
+        return math.stat.CurrentCI.upperBound;
+      }}
+  };
 };

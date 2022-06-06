@@ -1,10 +1,13 @@
 /* Changes from OESjs
 - sim.objects is a JS Map
  */
+import {oes} from "./OES-Foundation";
+import {math} from "../lib/math";
+import {EventList} from "../lib/EventList";
 /*******************************************************************
  * Initialize Simulator ********************************************
  *******************************************************************/
-sim.initializeSimulator = function () {
+export function initializeSimulator(sim) {
   if (sim.model.nextMomentDeltaT) sim.nextMomentDeltaT = sim.model.nextMomentDeltaT;
   else {  // assign defaults
     if (sim.model.time === "discrete") sim.nextMomentDeltaT = 1;
@@ -17,18 +20,19 @@ sim.initializeSimulator = function () {
   // Create map for statistics variables
   sim.stat = Object.create(null);
 }
+
 /*******************************************************************
- * Initialize a (standalone or experiment scenario) simulation run *
+ * Initialize a (standalone or experiment scenario) simulation.js run *
  *******************************************************************/
-sim.initializeScenarioRun = function () {
+export function initializeScenarioRun(sim) {
   // clear initial state data structures
   sim.objects.clear();
   sim.FEL.clear();
-  sim.step = 0;  // simulation loop step counter
-  sim.time = 0;  // simulation time
+  sim.step = 0;  // simulation.js loop step counter
+  sim.time = 0;  // simulation.js time
   // set default endTime
   sim.endTime = sim.scenario.durationInSimTime || Infinity;
-  // get ID counter from simulation scenario, or set to default value
+  // get ID counter from simulation.js scenario, or set to default value
   sim.idCounter = sim.scenario.idCounter || 1000;
   // set up initial state
   if (sim.scenario.setupInitialState) sim.scenario.setupInitialState();
@@ -37,24 +41,22 @@ sim.initializeScenarioRun = function () {
 /*******************************************************
  Advance Simulation Time
  ********************************************************/
-sim.advanceSimulationTime = function () {
+export function advanceSimulationTime(sim) {
   sim.nextEvtTime = sim.FEL.getNextOccurrenceTime();  // 0 if there is no next event
   // increment the step counter
   sim.step += 1;
-  // advance simulation time
+  // advance simulation.js time
   if (sim.nextEvtTime > 0) sim.time = sim.nextEvtTime;
 }
+
 /*******************************************************
- Run a simulation scenario
+ Run a simulation.js scenario
  ********************************************************/
-sim.runScenario = function () {
+export function runScenario(sim) {
   // Simulation Loop
   while (sim.time < sim.endTime && !sim.FEL.isEmpty()) {
-    // if not executed in a JS worker, create simulation log
-    if (typeof WorkerGlobalScope === 'undefined' && simLogTableEl) {
-      logSimulationStep( simLogTableEl);
-    }
-    sim.advanceSimulationTime();
+    // if not executed in a JS worker, create simulation.js log
+    advanceSimulationTime(sim);
     // extract and process next events
     const nextEvents = sim.FEL.removeNextEvents();
     for (const e of nextEvents) {
@@ -74,19 +76,21 @@ sim.runScenario = function () {
   }
   if (sim.model.computeFinalStatistics) sim.model.computeFinalStatistics();
 }
+
 /*******************************************************
  Run a Standalone Simulation Scenario (in a JS worker)
  ********************************************************/
-sim.runStandaloneScenario = function () {
-  sim.initializeSimulator();
-  sim.initializeScenarioRun();
-  sim.runScenario();
+export function runStandaloneScenario(sim) {
+  initializeSimulator(sim);
+  initializeScenarioRun(sim);
+  runScenario(sim);
 }
+
 /*******************************************************
  Run a Simple Experiment (in a JS worker)
  ********************************************************/
-sim.runSimpleExperiment = function (exp) {
-  sim.initializeSimulator();
+export function runSimpleExperiment(sim, exp) {
+  initializeSimulator(sim);
   // initialize replication statistics record
   if (sim.model.setupStatistics) sim.model.setupStatistics();
   exp.replicStat = Object.create(null);  // empty map
@@ -95,8 +99,8 @@ sim.runSimpleExperiment = function (exp) {
   }
   // run experiment scenario replications
   for (let k=0; k < exp.nmrOfReplications; k++) {
-    sim.initializeScenarioRun();
-    sim.runScenario();
+    initializeScenarioRun(sim);
+    runScenario(sim);
     // store replication statistics
     Object.keys( exp.replicStat).forEach( function (varName) {
       exp.replicStat[varName][k] = sim.stat[varName];
@@ -115,4 +119,5 @@ sim.runSimpleExperiment = function (exp) {
   // send experiment statistics to main thread
   self.postMessage({experiment: exp});
 };
+
 

@@ -1,12 +1,12 @@
 // Run Simulation and build a Table with the results
-import Worker from "../Core0/Inventory-Management/simulation-worker"
-
+import {runSimulation} from "../Core0_Cloudflare/Inventory-Managment/simulation-worker";
+import {sim} from "../Core0_Cloudflare/OESjs-Core0/OES-Foundation";
 function table_html() {
-  // const worker = new Worker();
-  let answer = "kek";
-  return `<div>` +  answer + `</div>`;
-}
 
+  let answer = runSimulation(sim);
+  return `<div>` +  answer + `</div>`;
+
+}
 
 const static_gen = () =>`
 <!DOCTYPE html>

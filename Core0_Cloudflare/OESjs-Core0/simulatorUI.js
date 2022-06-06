@@ -1,3 +1,9 @@
+/*****
+ *
+ * NEEDS TO BE COMPLETLY REWRITTEN
+ */
+
+
 // Define the namespace variable "oes" if not yet defined
 if (typeof oes !== "object") {
   oes = Object.create(null);
@@ -7,7 +13,7 @@ if (typeof oes !== "object") {
   };
 }
 /*******************************************************
- Create a simulation log entry (table row)
+ Create a simulation.js log entry (table row)
  ********************************************************/
 function logSimulationStep( simLogTableEl) {
   var rowEl = simLogTableEl.insertRow();  // create new table row

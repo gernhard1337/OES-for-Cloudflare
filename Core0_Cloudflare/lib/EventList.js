@@ -5,7 +5,7 @@
  * @license The MIT License (MIT)
  * @author Gerd Wagner
  ******************************************************************************/
-class EventList {
+export class EventList {
   constructor(a) {
     this.events = Array.isArray(a) ? a : [];
   }
